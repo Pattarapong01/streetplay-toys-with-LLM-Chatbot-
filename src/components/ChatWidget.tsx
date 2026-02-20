@@ -1,62 +1,23 @@
-import React, { useState } from 'react';
+import { MessageCircle } from 'lucide-react';
 import './ChatWidget.css';
 
-const ChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [chatLog, setChatLog] = useState<{ role: string, text: string }[]>([]);
-
-  const handleSend = async () => {
-    if (!message.trim()) return;
-    
-    // บันทึกข้อความที่เราพิมพ์
-    const newLog = [...chatLog, { role: 'user', text: message }];
-    setChatLog(newLog);
-    setMessage('');
-
-    try {
-      const response = await fetch("http://localhost:8000/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: "test_user", // ID สำหรับจำประวัติการคุย
-          message: message
-        }),
-      });
-      const data = await response.json();
-      // บันทึกคำตอบจากบอท (ที่จะลงท้ายด้วย yo yo)
-      setChatLog([...newLog, { role: 'bot', text: data.reply }]);
-    } catch (error) {
-      setChatLog([...newLog, { role: 'bot', text: "Error: Can't connect to server yo yo." }]);
-    }
-  };
-
+function ChatWidget() {
   return (
-    <div className="chat-container">
-      {isOpen && (
-        <div className="chat-window">
-          <div className="chat-header">SP Assistant 🤖</div>
-          <div className="chat-messages">
-            {chatLog.map((msg, i) => (
-              <div key={i} className={`message ${msg.role}`}>{msg.text}</div>
-            ))}
-          </div>
-          <div className="chat-input">
-            <input 
-              value={message} 
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Type here..."
-            />
-            <button onClick={handleSend}>Send</button>
-          </div>
-        </div>
-      )}
-      <button className="chat-toggle-btn" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? '✖' : '💬'}
-      </button>
+    <div className="chat-container fixed bottom-8 right-8 z-50">
+      <a 
+        href="https://c7404fa075a80ac1b9.gradio.live" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="flex items-center justify-center w-16 h-16 bg-street-lime text-street-black rounded-full shadow-lg hover:shadow-hard-lime hover:scale-110 transition-all duration-300 hover:bg-white group"
+        title="💬 Open Chat Assistant"
+      >
+        <MessageCircle className="w-8 h-8 group-hover:animate-bounce" />
+      </a>
+      <div className="absolute bottom-20 right-0 bg-street-black border-2 border-street-lime px-3 py-2 rounded-lg text-white text-sm font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        Chat with SP Bot
+      </div>
     </div>
   );
-};
+}
 
 export default ChatWidget;

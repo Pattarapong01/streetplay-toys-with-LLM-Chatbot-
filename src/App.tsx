@@ -1,6 +1,9 @@
 import { useState, createContext, useContext, useEffect } from 'react';
 import { Search, ShoppingCart, User, Menu, X, Instagram, Twitter, Facebook, Youtube, Heart, Star, ChevronRight, Plus, Minus, Trash2, Package, Clock, CreditCard, MapPin, LogOut } from 'lucide-react';
+import { ErrorBoundary } from './components/ErrorBoundary'; 
 import ChatWidget from './components/ChatWidget';
+
+
 // Product Data
 const products = [
   {
@@ -1249,7 +1252,6 @@ function Footer() {
     </footer>
   );
 }
-
 
 // Main App
 function App() {
